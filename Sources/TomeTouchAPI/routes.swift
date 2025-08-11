@@ -2,8 +2,8 @@ import Fluent
 import Vapor
 
 func routes(_ app: Application) throws {
-    /// Base path for  API routes.
-    /// /api/v1/
+    // Base path for  API routes.
+    // /api/v1/
     let api = app.grouped("api", "v1")
 
     // MARK: Systems Routes
