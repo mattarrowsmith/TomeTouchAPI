@@ -2,7 +2,7 @@ import Vapor
 
 // pull xml files from git repository, save locally?
 struct BSDataService {
-    func getGameSystems() throws -> [String] {
+    public func getGameSystems() throws -> [String] {
         //form up url pull base from config
         guard let baseURL = Environment.get("REPO_SOURCE") else {
             throw BSDataServiceError.missingSourceConfig
@@ -13,7 +13,6 @@ struct BSDataService {
         }
 
         let NetworkRequest = NetworkRequest(url: url, as: .get)
-
         return []
     }
 

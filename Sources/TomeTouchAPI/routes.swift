@@ -11,7 +11,9 @@ func routes(_ app: Application) throws {
 
     // GET /api/v1/systems
     systems.get { req in
-        "get all systems"
+        let BSDataService = BSDataService()
+        let systems = try BSDataService.getGameSystems()
+        return systems
     }
 
     // GET /api/v1/systems/:system
