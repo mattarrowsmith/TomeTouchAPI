@@ -9,18 +9,22 @@ import Foundation
 
 struct NetworkRequest {
     let url: URL
-    let method: HTTPMethod
+    let httpMethod: HTTPMethod
 
-    init(url: URL, method: HTTPMethod) {
+    init(url: URL, as method: HTTPMethod) {
         self.url = url
-        self.method = method
+        self.httpMethod = method
     }
 }
 
-enum HTTPMethod {
+enum HTTPMethod: String {
     case get
     case post
     case put
     case delete
     case patch
+
+    var description: String {
+        rawValue.uppercased()
+    }
 }
