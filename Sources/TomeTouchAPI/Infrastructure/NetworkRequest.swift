@@ -10,10 +10,16 @@ import Foundation
 struct NetworkRequest {
     let url: URL
     let httpMethod: HTTPMethod
+    let headers: [String: String]?
 
-    init(url: URL, as method: HTTPMethod) {
+    init(
+        url: URL,
+        as method: HTTPMethod,
+        headers: [String: String]? = nil
+    ) {
         self.url = url
         self.httpMethod = method
+        self.headers = headers
     }
 }
 

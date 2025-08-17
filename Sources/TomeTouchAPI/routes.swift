@@ -10,9 +10,9 @@ func routes(_ app: Application) throws {
     let systems = api.grouped("systems")
 
     // GET /api/v1/systems
-    systems.get { req in
-        let BSDataService = BSDataService()
-        let systems = try BSDataService.getGameSystems()
+    systems.get { req async throws in
+        let BSDataService = BSDataService(network: Network())
+        let systems = try await BSDataService.getGameSystems()
         return systems
     }
 

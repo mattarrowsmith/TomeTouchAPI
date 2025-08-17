@@ -14,6 +14,12 @@ struct Network: NetworkProtocol {
         var urlRequest = URLRequest(url: request.url)
         urlRequest.httpMethod = request.httpMethod.description
 
+        if request.headers != nil {
+            for (key, value) in request.headers! {
+                urlRequest.setValue(value, forHTTPHeaderField: key)
+            }
+        }
+
         let (data, response) = try await session.data(for: urlRequest)
         return NetworkResponse(data: data, response: response)
     }
