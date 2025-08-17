@@ -10,4 +10,8 @@ import Foundation
 struct NetworkResponse {
     let data: Data?
     let response: URLResponse?
+
+    var httpResponse: HTTPURLResponse? {
+        response as? HTTPURLResponse
+    }
 }

@@ -8,8 +8,25 @@ struct BSDataService {
         self.network = network
     }
 
+    /// Gets all repositories listed by the BSData Github.
+    /// Each repository corresponds to a game system.
+    /// - Returns: The list of repository names.
     public func getGameSystems() async throws -> [String] {
-        //form up url pull base from config
+        var repositories: [RepositoryDTO] = []
+        var nextURL: URL? = try createInitalURL()
+
+        while let url = nextURL {
+            let request = try createRequest(url: url)
+            let result = try await network.send(request)
+            let responseDTO = try JSONDecoder().decode([RepositoryDTO].self, from: result.data ?? Data())
+            nextURL = LinkHeaderParser.parse(from: result.httpResponse, relation: .next)
+            repositories.append(contentsOf: responseDTO)
+        }
+
+        return repositories.map { $0.name }
+    }
+
+    private func createInitalURL() throws -> URL {
         guard let baseURL = Environment.get("REPO_SOURCE") else {
             throw BSDataServiceError.missingSourceConfig
         }
@@ -18,15 +35,15 @@ struct BSDataService {
             throw BSDataServiceError.invalidURL(invalidURLString: baseURL)
         }
 
+        return url
+    }
+
+    private func createRequest(url: URL) throws -> NetworkRequest {
         let headers = [
             "Accept": "application/vnd.github.v3+json",
         ]
 
-        let request = NetworkRequest(url: url, as: .get, headers: headers)
-        let response = try await network.send(request)
-
-        let responseDTO = try JSONDecoder().decode([RepositoryDTO].self, from: response.data ?? Data())
-        return responseDTO.map { $0.name }
+        return NetworkRequest(url: url, as: .get, headers: headers)
     }
 
     enum BSDataServiceError: Error {
